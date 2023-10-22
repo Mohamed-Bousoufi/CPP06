@@ -24,8 +24,8 @@ class ScalarConverter
             static void Floatprint();
             static void Charprint();
             static void Doubleprint();
-            static void parser();
-            static void convert();
+            static void parser(std :: string str);
+            static void convert(std :: string str);
         
 };
 #endif

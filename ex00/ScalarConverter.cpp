@@ -25,19 +25,27 @@ ScalarConverter ::~ScalarConverter()
 {
 }
 
-void ScalarConverter::parser()
+void ScalarConverter::parser(std :: string str)
 {
-	size_t index;
-	index = _parameter.find_first_not_of(" \t\n\r");
-	ScalarConverter ::_parameter = &_parameter[index];
-	int points = 0;
-	for (size_t i = 0; i < _parameter.length(); i++)
+	try
 	{
-		if (_parameter[i] == '.')
-			points++;
-	}
+		size_t index;
+		index = _parameter.find_first_not_of(" \t\n\r");
+		ScalarConverter ::_parameter = &_parameter[index];
+		int points = 0;
+		for (size_t i = 0; i < str.length(); i++)
+		{
+			if (str[i] == '.')
+				points++;
+		}
 	if (points > 1)
 		throw "Invalide Parameter !!!";
+	}
+	catch (const char *e)
+	{
+		std::cout << e << std ::endl;
+		exit(1);
+	}
 }
 
 void ScalarConverter ::Intprint()
@@ -53,7 +61,7 @@ void ScalarConverter ::Intprint()
 			if (!std ::isdigit(_parameter[i]))
 				digit++;
 		}
-		if (_parameter[0] == '-' && digit < _parameter.length())
+		if ((_parameter[0] == '-' || _parameter[0] == '+'  ) && digit < _parameter.length())
 		{
 			digit--;
 		}
@@ -63,23 +71,23 @@ void ScalarConverter ::Intprint()
 		}
 		else if (digit == 2 && _parameter.back() == 'f' && _parameter.find('.') != std ::string ::npos)
 		{
-			double f = std ::stod(_parameter);
+			double f = std ::atof(_parameter.c_str());
 			if (f >= (static_cast<double>(INT_MAX) + 1) || f < (static_cast<double>(INT_MIN)))
 			{
 				throw "impossible";
 			}
-			int number = std ::stoi(_parameter);
+			int number = static_cast<int>(f);
 			std ::cout << number << std ::endl;
 			return;
 		}
 		else if (digit == 0)
 		{
-			double f = std ::stod(_parameter);
+			double f = std ::atof(_parameter.c_str());
 			if (f >= (static_cast<double>(INT_MAX) + 1) || f < (static_cast<double>(INT_MIN)))
 			{
 				throw "impossible";
 			}
-			int number = std ::stoi(_parameter);
+			int number = static_cast<int>(f);
 			std ::cout << number << std ::endl;
 			return;
 		}
@@ -91,12 +99,12 @@ void ScalarConverter ::Intprint()
 		}
 		else if (digit == 1 && _parameter.find('.') != std ::string ::npos)
 		{
-			double f = std ::stod(_parameter);
+			double f = std ::atof(_parameter.c_str());
 			if (f >= (static_cast<double>(INT_MAX) + 1) || f < (static_cast<double>(INT_MIN)))
 			{
 				throw "impossible";
 			}
-			int number = std ::stoi(_parameter);
+			int number =static_cast<int>(f);
 			std ::cout << number << std ::endl;
 			return;
 		}
@@ -122,7 +130,7 @@ void ::ScalarConverter ::Floatprint()
 			if (!std ::isdigit(_parameter[i]))
 				digit++;
 		}
-		if (_parameter[0] == '-' && digit < _parameter.length())
+		if ((_parameter[0] == '-' || _parameter[0] == '+'  ) && digit < _parameter.length())
 		{
 			digit--;
 		}
@@ -130,32 +138,32 @@ void ::ScalarConverter ::Floatprint()
 		{
 			if (!_parameter.compare("nanf") || !_parameter.compare("nan"))
 				throw "nanf";
-			else if (!_parameter.compare("-inff"))
+			else if (!_parameter.compare("-inff") || !_parameter.compare("-inf"))
 				throw "-inff";
-			else if (!_parameter.compare("-inff"))
+			else if (!_parameter.compare("+inff") ||  !_parameter.compare("+inf"))
 				throw "+inff";
 			else
 				throw "impossible";
 		}
 		else if (digit == 2 && _parameter.back() == 'f' && _parameter.find('.') != std ::string ::npos)
 		{
-			double f = std ::stod(_parameter);
+			double f = std ::atof(_parameter.c_str());
 			if (f >= (static_cast<double>(__FLT_MAX__) + 1))
 			{
 				throw "impossible";
 			}
-			float number = std ::stof(_parameter);
+			float number = static_cast<float>(f);
 			std ::cout << std::fixed << std::setprecision(1) << number << "f" << std ::endl;
 			return;
 		}
 		else if (digit == 0)
 		{
-			double f = std ::stod(_parameter);
+			double f = std ::atof(_parameter.c_str());
 			if (f >= (static_cast<double>(__FLT_MAX__) + 1))
 			{
 				throw "impossible";
 			}
-			float number = std ::stof(_parameter);
+			float number = static_cast<float>(f);
 			std ::cout << std::fixed << std::setprecision(1) << number << "f" << std ::endl;
 			return;
 		}
@@ -167,7 +175,7 @@ void ::ScalarConverter ::Floatprint()
 		}
 		else if (digit == 1 && _parameter.find('.') != std ::string ::npos)
 		{
-			double f = std ::stod(_parameter);
+			double f = std ::atof(_parameter.c_str());
 			if (f >= (static_cast<double>(__FLT_MAX__) + 1))
 			{
 				throw "impossible";
@@ -199,7 +207,7 @@ void ScalarConverter ::Doubleprint()
 			if (!std ::isdigit(_parameter[i]))
 				digit++;
 		}
-		if (_parameter[0] == '-' && digit < _parameter.length())
+		if ((_parameter[0] == '-' || _parameter[0] == '+'  ) && digit < _parameter.length())
 		{
 			digit--;
 		}
@@ -218,7 +226,7 @@ void ScalarConverter ::Doubleprint()
 		{
 			if (_parameter.length() >= 308)
 				throw "impossible";
-			double number = std ::stod(_parameter);
+			double number = std ::atof(_parameter.c_str());
 			std ::cout << std::fixed << std::setprecision(1) << number << std ::endl;
 			return;
 		}
@@ -226,7 +234,7 @@ void ScalarConverter ::Doubleprint()
 		{
 			if (_parameter.length() >= 308)
 				throw "impossible";
-			double number = std ::stod(_parameter);
+			double number = std ::atof(_parameter.c_str());
 			std ::cout << std::fixed << std::setprecision(1) << number << std ::endl;
 			return;
 		}
@@ -240,7 +248,7 @@ void ScalarConverter ::Doubleprint()
 		{
 			if (_parameter.length() >= 308)
 				throw "impossible";
-			double number = std ::stod(_parameter);
+			double number = std ::atof(_parameter.c_str());
 			std ::cout << std::fixed << std::setprecision(1) << number << std ::endl;
 			return;
 		}
@@ -266,13 +274,17 @@ void ScalarConverter ::Charprint()
 			if (!std ::isdigit(_parameter[i]))
 				digit++;
 		}
+		if ((_parameter[0] == '-' || _parameter[0] == '+'  ) && digit < _parameter.length())
+		{
+			digit--;
+		}
 		if (digit == _parameter.length() && _parameter.length() > 1)
 		{
 				throw "impossible";
 		}
 		else if (digit == 2 && _parameter.back() == 'f' && _parameter.find('.') != std ::string ::npos)
 		{
-			double number = std ::stod(_parameter);
+			double number = std ::atof(_parameter.c_str());
 			if(number > 31 && number <= 126)
 			{
 				char c = static_cast<char>(number);
@@ -285,7 +297,7 @@ void ScalarConverter ::Charprint()
 		}
 		else if (digit == 0)
 		{
-			double number = std ::stod(_parameter);
+			double number = std ::atof(_parameter.c_str());
 			if(number > 31 && number <= 126)
 			{
 				char c = static_cast<char>(number);
@@ -301,7 +313,7 @@ void ScalarConverter ::Charprint()
 		}
 		else if (digit == 1 && _parameter.find('.') != std ::string ::npos)
 		{
-			double number = std ::stod(_parameter);
+			double number = std ::atof(_parameter.c_str());
 			if(number > 31 && number <= 126)
 			{
 				char c = static_cast<char>(number);
@@ -311,6 +323,9 @@ void ScalarConverter ::Charprint()
 			else
 				throw "Non displayable";
 		}
+		else
+			throw "impossible";
+
 	}
 	catch (const char *e)
 	{
@@ -318,8 +333,9 @@ void ScalarConverter ::Charprint()
 	}
 }
 
-void ScalarConverter :: convert()
+void ScalarConverter :: convert(std :: string str)
 {
+	parser(str);
 	Charprint();
 	Intprint();
 	Floatprint();
